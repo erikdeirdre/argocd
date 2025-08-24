@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/CoastalYouthSoccer/helm-.git
+    repoURL: https://github.com/CoastalYouthSoccer/helm-charts.git
     targetRevision: HEAD
     path: charts/cysl-backend
     helm:
