@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cysl
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/CoastalYouthSoccer/helm-.git
+    targetRevision: HEAD
+    path: charts/cysl-backend
+    helm:
+      values: |
+        replicaCount: 2
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cysl
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+

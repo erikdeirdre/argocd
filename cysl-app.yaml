@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root-app
+  name: cysl-app
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/erikdeirdre/argocd.git
     targetRevision: main
-    path: apps
+    path: apps/cysl
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: cysl
   syncPolicy:
     automated:
       prune: true
