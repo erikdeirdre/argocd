@@ -14,7 +14,7 @@ spec:
         replicaCount: 1
         image:
           tag: add-association-officers-venue-rules
-        envFile: /opt/cysl/api/cysl-env
+        envFile: "/opt/cysl/api/cysl-env"
   destination:
     server: https://kubernetes.default.svc
     namespace: cysl
