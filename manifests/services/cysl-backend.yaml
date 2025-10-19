@@ -12,7 +12,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/CoastalYouthSoccer/helm-charts.git
-    targetRevision: main
+    targetRevision: finalize-templates
     path: charts/cysl-backend
     helm:
       values: |
