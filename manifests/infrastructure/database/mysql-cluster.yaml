@@ -6,7 +6,7 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   annotations:
-    argocd.argoproj.io/sync-wave: "3"  # After operator
+    argocd.argoproj.io/sync-wave: "10"  # After operator
 spec:
   project: default
   
@@ -25,3 +25,10 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
+    - SkipDryRunOnMissingResource=true  # Critical!
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
