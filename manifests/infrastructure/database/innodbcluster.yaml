@@ -2,7 +2,7 @@ apiVersion: mysql.oracle.com/v2
 kind: InnoDBCluster
 metadata:
   name: mysql-cluster
-  namespace: databases
+  namespace: mysql
 spec:
   secretName: mysql-root-password  # Must match secret name
   instances: 3

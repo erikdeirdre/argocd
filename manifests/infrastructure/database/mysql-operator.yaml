@@ -14,17 +14,6 @@ spec:
     repoURL: https://mysql.github.io/mysql-operator/
     chart: mysql-operator
     targetRevision: 2.2.5
-    
-    helm:
-      # Optional: Override default values
-      values: |
-        # Example customizations
-        # image:
-        #   pullPolicy: IfNotPresent
-        # resources:
-        #   limits:
-        #     cpu: 500m
-        #     memory: 512Mi
   
   destination:
     server: https://kubernetes.default.svc
