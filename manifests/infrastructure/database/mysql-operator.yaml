@@ -14,6 +14,22 @@ spec:
     repoURL: https://mysql.github.io/mysql-operator/
     chart: mysql-operator
     targetRevision: 2.2.5
+
+  helm:
+    # Override values to disable SSL verification (workaround for MicroK8s)
+    values: |
+      # Skip SSL verification for MicroK8s compatibility
+      podAnnotations:
+        microk8s.io/ssl-verify: "false"
+        
+      # Add environment variable to operator
+      env:
+      - name: PYTHONHTTPSVERIFY
+        value: "0"
+      - name: CURL_CA_BUNDLE
+        value: ""
+      - name: REQUESTS_CA_BUNDLE
+        value: ""
   
   destination:
     server: https://kubernetes.default.svc
