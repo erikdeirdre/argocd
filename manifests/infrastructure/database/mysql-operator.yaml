@@ -19,10 +19,6 @@ spec:
     helm:
       # Override values to disable SSL verification (workaround for MicroK8s)
       values: |
-        # Skip SSL verification for MicroK8s compatibility
-        podAnnotations:
-          microk8s.io/ssl-verify: "false"
-        
         # Add environment variable to operator
         env:
         - name: PYTHONHTTPSVERIFY
