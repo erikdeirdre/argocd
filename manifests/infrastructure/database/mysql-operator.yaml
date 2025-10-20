@@ -6,31 +6,41 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "1"  # Deploy with infrastructure
 spec:
   project: default
   
   source:
+    # Helm repo URL
     repoURL: https://mysql.github.io/mysql-operator/
     chart: mysql-operator
-    targetRevision: 2.2.5
-
-  helm:
-    # Override values to disable SSL verification (workaround for MicroK8s)
-    values: |
-      # Skip SSL verification for MicroK8s compatibility
-      podAnnotations:
-        microk8s.io/ssl-verify: "false"
+    targetRevision: 2.2.5  # Specify version or use "*" for latest
+    
+    helm:
+      # Override values to disable SSL verification (workaround for MicroK8s)
+      values: |
+        # Skip SSL verification for MicroK8s compatibility
+        podAnnotations:
+          microk8s.io/ssl-verify: "false"
         
-      # Add environment variable to operator
-      env:
-      - name: PYTHONHTTPSVERIFY
-        value: "0"
-      - name: CURL_CA_BUNDLE
-        value: ""
-      - name: REQUESTS_CA_BUNDLE
-        value: ""
-  
+        # Add environment variable to operator
+        env:
+        - name: PYTHONHTTPSVERIFY
+          value: "0"
+        - name: CURL_CA_BUNDLE
+          value: ""
+        - name: REQUESTS_CA_BUNDLE
+          value: ""
+        extraVolumes:
+        - name: microk8s-ca
+          hostPath:
+            path: /var/snap/microk8s/current/certs/ca.crt
+            type: File
+        
+        extraVolumeMounts:
+        - name: microk8s-ca
+          mountPath: /etc/ssl/certs/ca-certificates.crt
+          readOnly: true
   destination:
     server: https://kubernetes.default.svc
     namespace: mysql-operator
@@ -40,12 +50,5 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
-    - ServerSideApply=true
-    - RespectIgnoreDifferences=true
-  # Wait for CRDs to be established
-  ignoreDifferences:
-  - group: apiextensions.k8s.io
-    kind: CustomResourceDefinition
-    jsonPointers:
-    - /spec/conversion/webhook/clientConfig/caBundle
+    - CreateNamespace=true  # Equivalent to --create-namespace
+    - ServerSideApply=true   # Recommended for CRDs
