@@ -25,8 +25,6 @@ spec:
           value: "0"
         - name: CURL_CA_BUNDLE
           value: ""
-        - name: REQUESTS_CA_BUNDLE
-          value: ""
         extraVolumes:
         - name: microk8s-ca
           hostPath:
