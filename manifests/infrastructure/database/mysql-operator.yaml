@@ -22,10 +22,10 @@ spec:
         # Add environment variable to operator
         operator:
           env:
-          - name: PYTHONHTTPSVERIFY
-            value: "0"
-          - name: CURL_CA_BUNDLE
-            value: ""
+          - name: REQUESTS_CA_BUNDLE
+            value: /etc/ssl/certs/ca-certificates.crt
+          - name: SSL_CERT_FILE
+            value: /etc/ssl/certs/ca-certificates.crt
           extraVolumes:
           - name: microk8s-ca
             hostPath:
