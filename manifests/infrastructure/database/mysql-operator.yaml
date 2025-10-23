@@ -20,22 +20,7 @@ spec:
       # Override values to disable SSL verification (workaround for MicroK8s)
       values: |
         # Add environment variable to operator
-        operator:
-          env:
-          - name: REQUESTS_CA_BUNDLE
-            value: /etc/ssl/certs/ca-certificates.crt
-          - name: SSL_CERT_FILE
-            value: /etc/ssl/certs/ca-certificates.crt
-          extraVolumes:
-          - name: microk8s-ca
-            hostPath:
-              path: /var/snap/microk8s/current/certs/ca.crt
-              type: File
-        
-          extraVolumeMounts:
-          - name: microk8s-ca
-            mountPath: /etc/ssl/certs/ca-certificates.crt
-            readOnly: true
+        operator: {}
   destination:
     server: https://kubernetes.default.svc
     namespace: mysql-operator
