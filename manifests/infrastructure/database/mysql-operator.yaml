@@ -20,7 +20,12 @@ spec:
       # Override values to disable SSL verification (workaround for MicroK8s)
       values: |
         # Add environment variable to operator
-        operator: {}
+        operator:
+          env:
+          - name: PYTHONHTTPSVERIFY
+            value: "0"
+          - name: CURL_CA_BUNDLE
+            value: ""
   destination:
     server: https://kubernetes.default.svc
     namespace: mysql-operator
