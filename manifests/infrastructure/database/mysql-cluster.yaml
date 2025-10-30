@@ -26,9 +26,21 @@ spec:
     syncOptions:
     - CreateNamespace=true
     - SkipDryRunOnMissingResource=true  # Critical!
+    - ServerSideApply=true
+    - RespectIgnoreDifferences=true
     retry:
       limit: 5
       backoff:
         duration: 5s
         factor: 2
         maxDuration: 3m
+
+  managedNamespaceMetadata:
+    labels:
+      pod-security.kubernetes.io/enforce: baseline
+  
+  ignoreDifferences:
+    - group: cert-manager.io
+      kind: Certificate
+      jsonPointers:
+        - /status
