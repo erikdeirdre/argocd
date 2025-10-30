@@ -11,6 +11,7 @@ spec:
     kind: Ingress
     jsonPointers:
     - /status
+
   project: default
   
   source:
@@ -31,3 +32,4 @@ spec:
       allowEmpty: false
     syncOptions:
     - CreateNamespace=true
+    - RespectIgnoreDifferences=true
