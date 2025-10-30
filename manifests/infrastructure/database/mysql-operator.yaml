@@ -14,7 +14,7 @@ spec:
     # Helm repo URL
     repoURL: https://mysql.github.io/mysql-operator/
     chart: mysql-operator
-    targetRevision: 2.2.5  # Specify version or use "*" for latest
+    targetRevision: 2.2.6  # Specify version or use "*" for latest
     
     helm:
       # Override values to disable SSL verification (workaround for MicroK8s)
