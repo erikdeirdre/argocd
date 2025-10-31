@@ -17,6 +17,7 @@ spec:
     targetRevision: 2.2.6  # Specify version or use "*" for latest
     
     helm:
+      skipCrds: false
       # Override values to disable SSL verification (workaround for MicroK8s)
       values: |
         # Add environment variable to operator
@@ -37,3 +38,13 @@ spec:
     syncOptions:
     - CreateNamespace=true  # Equivalent to --create-namespace
     - ServerSideApply=true   # Recommended for CRDs
+    - Replace=true
+
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      name: innodbclusters.mysql.oracle.com
+      jsonPointers:
+        - /status
+        - /metadata/annotations
+        - /spec/conversion/webhook/clientConfig/caBundle
