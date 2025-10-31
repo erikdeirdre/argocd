@@ -11,7 +11,7 @@ spec:
   project: default
   
   source:
-    repoURL: https://github.com/your-org/gitops-repo.git
+    repoURL: https://github.com/erikdeirdre/argocd.git
     targetRevision: main
     path: apps/databases/mysql-cluster
   
