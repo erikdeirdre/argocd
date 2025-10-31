@@ -6,7 +6,7 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   annotations:
-    argocd.argoproj.io/sync-wave: "10"  # After operator
+    argocd.argoproj.io/sync-wave: "15"  # After operator
 spec:
   project: default
   
