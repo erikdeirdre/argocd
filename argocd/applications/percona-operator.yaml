@@ -1,0 +1,35 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: percona-xtradb-operator
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+spec:
+  project: default
+  
+  source:
+    repoURL: https://percona.github.io/percona-helm-charts/
+    chart: pxc-operator
+    targetRevision: 1.15.0  # Check for latest version
+    
+    helm:
+      skipCrds: false
+      values: |
+        # Operator configuration
+        watchNamespace: ""  # Watch all namespaces, or specify one
+        
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: percona-operator
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

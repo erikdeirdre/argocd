@@ -1,0 +1,101 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: percona-xtradb-cluster
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"  # After operator
+spec:
+  project: default
+  
+  source:
+    repoURL: https://percona.github.io/percona-helm-charts/
+    chart: pxc-db
+    targetRevision: 1.15.0
+    
+    helm:
+      skipCrds: false
+      values: |
+        # Cluster configuration
+        finalizers:
+          - delete-pxc-pods-in-order
+        
+        pxc:
+          size: 3  # 3-node cluster for HA, use 1 for dev
+          image:
+            repository: percona/percona-xtradb-cluster
+            tag: 8.0.36-28.1
+          
+          # Resource requests/limits
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 500m
+            limits:
+              memory: 2Gi
+              cpu: 1000m
+          
+          # Persistence
+          persistence:
+            enabled: true
+            storageClass: ""  # Use default, or specify your storage class
+            size: 10Gi
+          
+          # Expose service
+          expose:
+            enabled: true
+            type: ClusterIP  # or LoadBalancer
+        
+        # HAProxy for load balancing
+        haproxy:
+          enabled: true
+          size: 1  # Use 3 for HA
+          image:
+            repository: percona/percona-xtradb-cluster-operator
+            tag: 1.15.0-haproxy
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+        
+        # ProxySQL (alternative to HAProxy)
+        proxysql:
+          enabled: false
+        
+        # Backups (optional)
+        backup:
+          enabled: false
+          # Uncomment and configure for backups
+          # image:
+          #   repository: percona/percona-xtradb-cluster-operator
+          #   tag: 1.15.0-pxc8.0-backup
+          # storages:
+          #   s3-us-west:
+          #     type: s3
+          #     s3:
+          #       bucket: my-backup-bucket
+          #       region: us-west-2
+        
+        # Secrets (will be auto-generated if not provided)
+        secrets:
+          passwords:
+            root: ""  # Leave empty to auto-generate
+            xtrabackup: ""
+            monitor: ""
+            clustercheck: ""
+            proxyadmin: ""
+            operator: ""
+        
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mysql  # or your preferred namespace
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
