@@ -64,11 +64,7 @@ spec:
           # Persistence
           persistence:
             enabled: true
-            storageClass:
-              name: nfs-client
-              defaultClass: true
-              reclaimPolicy: Retain
-              archiveOnDelete: false
+            storageClass: nfs-client
             size: 10Gi
           
           # Expose service
