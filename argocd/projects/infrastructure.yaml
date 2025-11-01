@@ -12,7 +12,7 @@ spec:
   sourceRepos:
     - https://github.com/erikdeirdre/argocd.git
     - https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
-    - https://mysql.github.io/mysql-operator/
+    - https://percona.github.io/percona-helm-charts/
     - https://charts.jetstack.io  # cert-manager if needed
     - '*'  # Allow all repos (less secure but flexible)
   
@@ -20,7 +20,7 @@ spec:
   destinations:
     - namespace: 'nfs-provisioner'
       server: https://kubernetes.default.svc
-    - namespace: 'mysql-operator'
+    - namespace: 'percona-operator'
       server: https://kubernetes.default.svc
     - namespace: 'cert-manager'
       server: https://kubernetes.default.svc
@@ -111,16 +111,7 @@ spec:
   #     duration: 8h
   #     applications:
   #       - '*'
-  #   - kind: deny
-  #     schedule: '0 0 * * 6,0'  # Weekends
-  #     duration: 24h
-  #     applications:
-  #       - mysql-cluster
   
   # Orphaned resources - what to do with resources not in Git
   orphanedResources:
     warn: true
-    # ignore:
-    #   - group: ''
-    #     kind: Secret
-    #     name: mysql-root-secret
