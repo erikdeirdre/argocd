@@ -32,21 +32,21 @@ spec:
             prometheus.io/path: "/metrics"
 
           # Add mysqld_exporter sidecar for MySQL metrics
-          sidecars:
-          - name: mysqld-exporter
-            image: prom/mysqld-exporter:v0.15.1
-            ports:
-            - containerPort: 9104
-              name: metrics
-              protocol: TCP
-            env:
-            - name: DATA_SOURCE_NAME
-              value: "monitor:$(MONITOR_PASSWORD)@(localhost:3306)/"
-            - name: MONITOR_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: my-cluster-secrets
-                  key: monitor
+#          sidecars:
+#          - name: mysqld-exporter
+#            image: prom/mysqld-exporter:v0.15.1
+#            ports:
+#            - containerPort: 9104
+#              name: metrics
+#              protocol: TCP
+#            env:
+#            - name: DATA_SOURCE_NAME
+#              value: "monitor:$(MONITOR_PASSWORD)@(localhost:3306)/"
+#            - name: MONITOR_PASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: my-cluster-secrets
+#                  key: monitor
 
           image:
             repository: percona/percona-xtradb-cluster
