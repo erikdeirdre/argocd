@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mysql-operator-config
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"  # Deploy before operator
+spec:
+  project: default
+  
+  source:
+    repoURL: https://github.com/erikdeirdre/argocd.git
+    targetRevision: work-on-appofapps
+    path: infrastructure/mysql-operator/mysql-operator/base
+    
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mysql-operator
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

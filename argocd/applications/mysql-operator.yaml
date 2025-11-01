@@ -30,15 +30,15 @@ spec:
           - name: KUBERNETES_VERIFY_SSL
             value: "false"
   
-        volumeMounts:
-        - name: ssl-patch
-          mountPath: /usr/lib/mysqlsh/python-packages/sitecustomize.py
-          subPath: sitecustomize.py
+          volumeMounts:
+          - name: ssl-patch
+            mountPath: /usr/lib/mysqlsh/python-packages/sitecustomize.py
+            subPath: sitecustomize.py
 
-        volumes:
-        - name: ssl-patch
-          configMap:
-            name: kopf-ssl-patch
+          volumes:
+          - name: ssl-patch
+            configMap:
+              name: kopf-ssl-patch
   destination:
     server: https://kubernetes.default.svc
     namespace: mysql-operator
