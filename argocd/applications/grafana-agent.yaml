@@ -1,0 +1,84 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana-agent
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  project: default
+  
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    chart: grafana-agent
+    targetRevision: 0.44.2
+    
+    helm:
+      values: |
+        agent:
+          mode: 'flow'
+          
+          configMap:
+            content: |
+              prometheus.remote_write "grafana_cloud" {
+                endpoint {
+                  url = "https://prometheus-xxx.grafana.net/api/prom/push"
+                  basic_auth {
+                    username = "123456"
+                    password = "your-api-key"
+                  }
+                }
+              }
+              
+              // Scrape Kubernetes pods with prometheus annotations
+              discovery.kubernetes "pods" {
+                role = "pod"
+              }
+              
+              discovery.relabel "pods" {
+                targets = discovery.kubernetes.pods.targets
+                
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_scrape"]
+                  action = "keep"
+                  regex = "true"
+                }
+                
+                rule {
+                  source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_path"]
+                  target_label = "__metrics_path__"
+                  regex = "(.+)"
+                }
+                
+                rule {
+                  source_labels = ["__address__", "__meta_kubernetes_pod_annotation_prometheus_io_port"]
+                  target_label = "__address__"
+                  regex = "([^:]+)(?::\\d+)?;(\\d+)"
+                  replacement = "$1:$2"
+                }
+              }
+              
+              prometheus.scrape "pods" {
+                targets = discovery.relabel.pods.output
+                forward_to = [prometheus.remote_write.grafana_cloud.receiver]
+              }
+              
+              // Node exporter metrics
+              prometheus.exporter.unix "node" { }
+              
+              prometheus.scrape "node" {
+                targets = prometheus.exporter.unix.node.targets
+                forward_to = [prometheus.remote_write.grafana_cloud.receiver]
+              }
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

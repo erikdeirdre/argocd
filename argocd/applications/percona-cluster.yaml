@@ -25,6 +25,29 @@ spec:
         
         pxc:
           size: 3  # 3-node cluster for HA, use 1 for dev
+
+          podAnnotations:
+            prometheus.io/scrape: "true"
+            prometheus.io/port: "9104"
+            prometheus.io/path: "/metrics"
+
+          # Add mysqld_exporter sidecar for MySQL metrics
+          sidecars:
+          - name: mysqld-exporter
+            image: prom/mysqld-exporter:v0.15.1
+            ports:
+            - containerPort: 9104
+              name: metrics
+              protocol: TCP
+            env:
+            - name: DATA_SOURCE_NAME
+              value: "monitor:$(MONITOR_PASSWORD)@(localhost:3306)/"
+            - name: MONITOR_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-cluster-secrets
+                  key: monitor
+
           image:
             repository: percona/percona-xtradb-cluster
             tag: 8.0.36-28.1
@@ -60,6 +83,11 @@ spec:
             requests:
               memory: 256Mi
               cpu: 100m
+
+          podAnnotations:
+            prometheus.io/scrape: "true"
+            prometheus.io/port: "8404"
+            prometheus.io/path: "/stats/prometheus"
         
         # ProxySQL (alternative to HAProxy)
         proxysql:
