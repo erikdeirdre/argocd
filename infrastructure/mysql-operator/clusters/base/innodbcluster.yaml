@@ -5,7 +5,7 @@ metadata:
   namespace: mysql
   annotations:
     argocd.argoproj.io/sync-options: "Validate=false"
-    argocd.argoproj.io/sync-wave: "10"
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   secretName: mysql-root-password  # Must match secret name
   instances: 3
