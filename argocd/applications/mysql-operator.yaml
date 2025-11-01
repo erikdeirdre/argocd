@@ -25,8 +25,20 @@ spec:
           env:
           - name: PYTHONHTTPSVERIFY
             value: "0"
-          - name: CURL_CA_BUNDLE
-            value: ""
+          - name: PYTHONWARNINGS
+            value: "ignore:Unverified HTTPS request"
+          - name: KUBERNETES_VERIFY_SSL
+            value: "false"
+  
+        volumeMounts:
+        - name: ssl-patch
+          mountPath: /usr/lib/mysqlsh/python-packages/sitecustomize.py
+          subPath: sitecustomize.py
+
+        volumes:
+        - name: ssl-patch
+          configMap:
+            name: kopf-ssl-patch
   destination:
     server: https://kubernetes.default.svc
     namespace: mysql-operator
