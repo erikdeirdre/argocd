@@ -38,14 +38,14 @@ spec:
             cpu: 1000m
         
         persistence:
-            enabled: true
-            storageClass: nfs-client
-            size: 10Gi
+          enabled: true
+          storageClass: nfs-client
+          size: 10Gi
           
           # Expose service
-          expose:
-            enabled: true
-            type: ClusterIP  # or LoadBalancer
+        expose:
+          enabled: true
+          type: ClusterIP  # or LoadBalancer
         
         # HAProxy for load balancing
         haproxy:
