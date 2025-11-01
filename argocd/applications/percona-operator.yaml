@@ -14,7 +14,7 @@ spec:
   source:
     repoURL: https://percona.github.io/percona-helm-charts/
     chart: pxc-operator
-    targetRevision: 1.15.0  # Check for latest version
+    targetRevision: 1.18.0
     
     helm:
       skipCrds: false

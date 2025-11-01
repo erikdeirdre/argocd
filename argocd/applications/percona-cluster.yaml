@@ -14,7 +14,7 @@ spec:
   source:
     repoURL: https://percona.github.io/percona-helm-charts/
     chart: pxc-db
-    targetRevision: 1.15.0
+    targetRevision: 1.18.0
     
     helm:
       skipCrds: false
@@ -64,7 +64,11 @@ spec:
           # Persistence
           persistence:
             enabled: true
-            storageClass: ""  # Use default, or specify your storage class
+            storageClass:
+              name: nfs-client
+              defaultClass: true
+              reclaimPolicy: Retain
+              archiveOnDelete: false
             size: 10Gi
           
           # Expose service
@@ -75,10 +79,7 @@ spec:
         # HAProxy for load balancing
         haproxy:
           enabled: true
-          size: 1  # Use 3 for HA
-          image:
-            repository: percona/percona-xtradb-cluster-operator
-            tag: 1.15.0-haproxy
+          size: 3  # Use 3 for HA
           resources:
             requests:
               memory: 256Mi
