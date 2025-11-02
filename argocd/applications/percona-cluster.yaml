@@ -53,7 +53,7 @@ spec:
           # HAProxy for load balancing
           haproxy:
             enabled: true
-            size: 3  # Use 3 for HA
+            size: 2  # Use 3 for HA
             resources:
               requests:
                 memory: 256Mi
