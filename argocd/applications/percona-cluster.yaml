@@ -24,7 +24,7 @@ spec:
           - delete-pxc-pods-in-order
         
         pxc:
-          size: 3  # 3-node cluster for HA, use 1 for dev
+          size: 2  # 3-node cluster for HA, use 1 for dev
           image:
             repository: percona/percona-xtradb-cluster
             tag: 8.0.36-28.1
