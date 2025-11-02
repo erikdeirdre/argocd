@@ -1,100 +1,78 @@
----
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: grafana-agent
-  namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "3"
+  name: grafana-k8s-monitoring
+  namespace: monitoring
+finalizers:
+  - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
-  
-  source:
-    repoURL: https://grafana.github.io/helm-charts
-    chart: grafana-agent
-    targetRevision: 0.44.2
-    
-    helm:
-      values: |
-        agent:
-          mode: 'flow'
-          extraEnv:
-            - name: GRAFANA_CLOUD_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: grafana-cloud-credentials
-                  key: username
-            - name: GRAFANA_CLOUD_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: grafana-cloud-credentials
-                  key: password
-            - name: GRAFANA_CLOUD_URL
-              valueFrom:
-                secretKeyRef:
-                  name: grafana-cloud-credentials
-                  key: prometheus-url
-          
-          configMap:
-            content: |
-              prometheus.remote_write "grafana_cloud" {
-                endpoint {
-                  url = env("GRAFANA_CLOUD_URL")
-                  basic_auth {
-                    username = env("GRAFANA_CLOUD_USERNAME")
-                    password = env("GRAFANA_CLOUD_PASSWORD")
-                  }
-                }
-              }
-              
-              // Scrape Kubernetes pods with prometheus annotations
-              discovery.kubernetes "pods" {
-                role = "pod"
-              }
-              
-              discovery.relabel "pods" {
-                targets = discovery.kubernetes.pods.targets
-                
-                rule {
-                  source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_scrape"]
-                  action = "keep"
-                  regex = "true"
-                }
-                
-                rule {
-                  source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_path"]
-                  target_label = "__metrics_path__"
-                  regex = "(.+)"
-                }
-                
-                rule {
-                  source_labels = ["__address__", "__meta_kubernetes_pod_annotation_prometheus_io_port"]
-                  target_label = "__address__"
-                  regex = "([^:]+)(?::\\d+)?;(\\d+)"
-                  replacement = "$1:$2"
-                }
-              }
-              
-              prometheus.scrape "pods" {
-                targets = discovery.relabel.pods.output
-                forward_to = [prometheus.remote_write.grafana_cloud.receiver]
-              }
-              
-              // Node exporter metrics
-              prometheus.exporter.unix "node" { }
-              
-              prometheus.scrape "node" {
-                targets = prometheus.exporter.unix.node.targets
-                forward_to = [prometheus.remote_write.grafana_cloud.receiver]
-              }
-  
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: monitoring
-  
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
+destination:
+  name: ''
+  namespace: "{namespace}"
+  server: 'https://kubernetes.default.svc'
+source:
+  path: ''
+  repoURL: 'https://grafana.github.io/helm-charts'
+  targetRevision: ''
+  chart: k8s-monitoring
+  helm:
+    valuesObject:
+      cluster:
+        name: main
+
+        externalServices:
+          prometheus:
+            hostKey: prometheus-url
+            basicAuth:
+              usernameKey: username
+              passwordKey: password
+            secret:
+              name: grafana-cloud-credentials
+              namespace: monitoring
+          loki:
+            hostKey: loki-url
+            basicAuth:
+              usernameKey: username
+              passwordKey: password
+            secret:
+              name: grafana-cloud-credentials
+              namespace: monitoring
+
+        destinations:
+          - name: grafana-cloud-metrics
+            type: prometheus
+            secret:
+              create: false
+              name: grafana-cloud-credentials
+              namespace: monitoring
+          - name: grafana-cloud-logs
+            type: loki
+            secret:
+              create: false
+              name: grafana-cloud-credentials
+              namespace: monitoring
+
+      clusterMetrics:
+        enabled: true
+        kepler:
+          enabled: true
+        opencost:
+          enabled: false
+          metricsSource: grafana-cloud-metrics
+          opencost:
+            exporter:
+              defaultClusterId: "{cluster-name}"
+            prometheus:
+              existingSecretName: grafana-cloud-metrics-grafana-k8s-monitoring
+              external:
+                url: "{prometheus-url}/api/prom"
+      clusterEvents:
+        enabled: true
+      podLogs:
+        enabled: true
+      alloy-metrics:
+        enabled: true
+      alloy-singleton:
+        enabled: true
+      alloy-logs:
+        enabled: true
