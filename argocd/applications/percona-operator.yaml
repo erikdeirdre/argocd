@@ -20,7 +20,7 @@ spec:
       skipCrds: false
       values: |
         # Operator configuration
-        watchNamespace: ""  # Watch all namespaces, or specify one
+        watchNamespace: "mysql"  # Watch all namespaces, or specify one
         
   destination:
     server: https://kubernetes.default.svc
