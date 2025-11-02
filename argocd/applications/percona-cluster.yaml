@@ -23,6 +23,9 @@ spec:
         finalizers:
           - delete-pxc-pods-in-order
         
+        enableCRValidationWebhook: false
+        crVersion: 1.18.0
+
         pxc:
           size: 2  # 3-node cluster for HA, use 1 for dev
           image:

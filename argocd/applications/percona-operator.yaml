@@ -23,8 +23,6 @@ spec:
         watchNamespace: ""  # Watch all namespaces, or specify one
         operator:
           watchNamespace: ""
-          webhooks:
-            enabled: false
         
   destination:
     server: https://kubernetes.default.svc
