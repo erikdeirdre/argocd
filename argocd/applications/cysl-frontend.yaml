@@ -1,0 +1,30 @@
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cysl-frontend
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"  # Deploy after everything else
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/CoastalYouthSoccer/helm-charts.git
+    targetRevision: finalize-templates
+    path: charts/cysl-frontend
+    helm:
+      values: |
+        replicaCount: 2
+        image:
+          tag: latest
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cysl
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
