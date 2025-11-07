@@ -16,9 +16,9 @@ spec:
     path: charts/cysl-frontend
     helm:
       values: |
-        replicaCount: 2
+        replicaCount: 1
         image:
-          tag: latest
+          tag: dockerize-frontend
   destination:
     server: https://kubernetes.default.svc
     namespace: cysl
