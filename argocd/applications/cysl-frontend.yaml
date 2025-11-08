@@ -15,6 +15,9 @@ spec:
     targetRevision: finalize-templates
     path: charts/cysl-frontend
     helm:
+      valueFiles:
+      - ../../shared/values-global.yaml  # Shared values
+      - values.yaml  
       values: |
         replicaCount: 1
         image:

@@ -1,0 +1,4 @@
+global:
+  domainName: example.com
+  environment: production
+  letsEncryptIssuer: lets-encrypt-staging
