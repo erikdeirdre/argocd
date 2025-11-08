@@ -17,11 +17,12 @@ spec:
     helm:
       valueFiles:
       - ../../shared/values-global.yaml  # Shared values
-      - values.yaml  
-      values: |
-        replicaCount: 2
-        image:
-          tag: latest
+      - values.yaml
+      parameters:
+      - name: replicaCount
+        value: "1"
+      - name: image.tag
+        value: latest
   destination:
     server: https://kubernetes.default.svc
     namespace: cysl

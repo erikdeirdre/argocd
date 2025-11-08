@@ -17,11 +17,12 @@ spec:
     helm:
       valueFiles:
       - ../../shared/values-global.yaml  # Shared values
-      - values.yaml  
-      values: |
-        replicaCount: 1
-        image:
-          tag: dockerize-frontend
+      - values.yaml
+      parameters:
+      - name: replicaCount
+        value: "1"
+      - name: image.tag
+        value: dockerize-frontend
   destination:
     server: https://kubernetes.default.svc
     namespace: cysl
