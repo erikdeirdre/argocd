@@ -13,7 +13,7 @@ spec:
   source:
     repoURL: https://helm.releases.hashicorp.com
     chart: vault
-    targetRevision: 0.28.1  # Check for latest version
+    targetRevision: 0.31.0
     helm:
       values: |
         global:
@@ -40,7 +40,7 @@ spec:
           
           # HA mode (recommended for production)
           ha:
-            replicas: 3
+            replicas: 2
             raft:
               enabled: true
               setNodeId: true
