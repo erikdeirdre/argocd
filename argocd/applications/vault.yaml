@@ -1,0 +1,108 @@
+# argocd/applications/vault.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vault
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"  # Install early
+spec:
+  project: default
+  source:
+    repoURL: https://helm.releases.hashicorp.com
+    chart: vault
+    targetRevision: 0.28.1  # Check for latest version
+    helm:
+      values: |
+        server:
+          standalone:
+            enabled: true
+          
+          # HA mode (recommended for production)
+          ha:
+            enabled: false
+            replicas: 2
+            raft:
+              enabled: true
+              setNodeId: true
+              config: |
+                ui = true
+                
+                listener "tcp" {
+                  tls_disable = 1
+                  address = "[::]:8200"
+                  cluster_address = "[::]:8201"
+                }
+                
+                storage "raft" {
+                  path = "/vault/data"
+                }
+                
+                service_registration "kubernetes" {}
+          
+          # Resources
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 250m
+            limits:
+              memory: 512Mi
+              cpu: 500m
+          
+          # Ingress
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            annotations:
+              traefik.ingress.kubernetes.io/router.entrypoints: websecure
+              traefik.ingress.kubernetes.io/router.tls: "true"
+              cert-manager.io/cluster-issuer: selfsigned-issuer
+            hosts:
+            - host: vault.{{ .Values.global.domainName }}
+              paths:
+              - /
+            tls:
+            - secretName: vault-tls
+              hosts:
+              - vault.{{ .Values.global.domainName }}
+          
+          # Data storage
+          dataStorage:
+            enabled: true
+            size: 10Gi
+            storageClass: nfs-client
+          
+          # Audit storage
+          auditStorage:
+            enabled: true
+            size: 10Gi
+        
+        # UI
+        ui:
+          enabled: true
+          serviceType: ClusterIP
+        
+        # Injector (for automatic secret injection)
+        injector:
+          enabled: true
+          replicas: 1
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 250m
+            limits:
+              memory: 512Mi
+              cpu: 500m
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: vault
+  
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
