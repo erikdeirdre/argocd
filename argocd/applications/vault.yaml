@@ -18,11 +18,11 @@ spec:
       values: |
         server:
           standalone:
-            enabled: true
+            enabled: false
           
           # HA mode (recommended for production)
           ha:
-            enabled: false
+            enabled: true
             replicas: 2
             raft:
               enabled: true
