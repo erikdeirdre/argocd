@@ -60,13 +60,13 @@ spec:
               traefik.ingress.kubernetes.io/router.tls: "true"
               cert-manager.io/cluster-issuer: selfsigned-issuer
             hosts:
-            - host: vault.{{ .Values.global.domainName }}
+            - host: vault.example.com
               paths:
               - /
             tls:
             - secretName: vault-tls
               hosts:
-              - vault.{{ .Values.global.domainName }}
+              - vault.example.com
           
           # Data storage
           dataStorage:
