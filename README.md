@@ -37,3 +37,7 @@ kubectl apply -f root.yaml
 
 1. Delete files from `manifests/<component-type>/<app-name>.yaml`
 2. Commit and push - ArgoCD will auto-prune
+
+## Troubleshooting
+
+

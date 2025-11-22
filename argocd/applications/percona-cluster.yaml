@@ -31,7 +31,7 @@ spec:
           image:
             repository: percona/percona-xtradb-cluster
             tag: 8.0.36-28.1
-
+          clusterSecretName: percona-xtradb-cluste-secrets
           resources:
             requests:
               memory: 1Gi
