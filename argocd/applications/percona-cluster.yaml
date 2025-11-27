@@ -27,6 +27,8 @@ spec:
         crVersion: 1.18.0
 
         pxc:
+          unsafeFlags:
+            pxcSize: true
           size: 1  # 3-node cluster for HA, use 1 for dev
           image:
             repository: percona/percona-xtradb-cluster
