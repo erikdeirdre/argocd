@@ -25,10 +25,10 @@ spec:
         
         enableCRValidationWebhook: false
         crVersion: 1.18.0
+        unsafeFlags:
+          pxcSize: true
 
         pxc:
-          unsafeFlags:
-            pxcSize: true
           size: 1  # 3-node cluster for HA, use 1 for dev
           image:
             repository: percona/percona-xtradb-cluster
