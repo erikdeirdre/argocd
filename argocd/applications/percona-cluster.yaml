@@ -32,15 +32,6 @@ spec:
             repository: percona/percona-xtradb-cluster
             tag: 8.0.36-28.1
           clusterSecretName: percona-xtradb-cluster-secrets
-          # Ensure pods run on different nodes
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchLabels:
-                    app.kubernetes.io/name: percona-xtradb-cluster
-                    app.kubernetes.io/instance: percona-xtradb-cluster
-                topologyKey: kubernetes.io/hostname
           resources:
             requests:
               memory: 2Gi
