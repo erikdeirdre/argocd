@@ -23,6 +23,9 @@ spec:
         watchNamespace: ""  # Watch all namespaces, or specify one
         operator:
           watchNamespace: ""
+        env:
+          - name: WATCH_NAMESPACE
+            value: ""
         
   destination:
     server: https://kubernetes.default.svc
