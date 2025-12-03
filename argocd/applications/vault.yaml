@@ -35,8 +35,9 @@ spec:
             - mountPath: /vault/userconfig/vault-ha-tls
               name: userconfig-vault-ha-tls
               readOnly: true
-                standalone:
-                  enabled: false
+
+          standalone:
+            enabled: false
           
           # HA mode (recommended for production)
           ha:
