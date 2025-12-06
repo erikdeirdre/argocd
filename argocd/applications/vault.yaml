@@ -84,6 +84,10 @@ spec:
               - host: vault.example.com
                 paths:
                   - /
+            tls:
+              - secretName: vault-ui-tls
+                hosts:
+                  - vault.example.com
           
           # Data storage
           dataStorage:
