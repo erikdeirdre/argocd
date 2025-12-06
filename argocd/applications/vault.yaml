@@ -104,7 +104,8 @@ spec:
         # Injector (for automatic secret injection)
         injector:
           enabled: true
-  
+          certs:
+            secretName: vault-ha-tls
   destination:
     server: https://kubernetes.default.svc
     namespace: vault
