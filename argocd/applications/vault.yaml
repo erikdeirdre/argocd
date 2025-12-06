@@ -18,7 +18,7 @@ spec:
       values: |
         global:
           enabled: true
-          tlsDisable: true
+          tlsDisable: false
         server:
           extraEnvironmentVars:
             VAULT_CACERT: /vault/userconfig/vault-ha-tls/vault.ca
