@@ -35,13 +35,13 @@ spec:
               readOnly: true
 
           standalone:
-            enabled: false
+            enabled: true
           
           # HA mode (recommended for production)
           ha:
             replicas: 2
             raft:
-              enabled: true
+              enabled: false
               setNodeId: true
               config: |
                  cluster_name = "vault-integrated-storage"
