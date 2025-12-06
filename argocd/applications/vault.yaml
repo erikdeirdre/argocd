@@ -18,7 +18,7 @@ spec:
       values: |
         global:
           enabled: true
-          tlsDisable: false
+          tlsDisable: true
         server:
           extraEnvironmentVars:
             VAULT_CACERT: /vault/userconfig/vault-ha-tls/vault.ca
@@ -35,13 +35,13 @@ spec:
               readOnly: true
 
           standalone:
-            enabled: false
+            enabled: true
           
           # HA mode (recommended for production)
           ha:
             replicas: 2
             raft:
-              enabled: true
+              enabled: false
               setNodeId: true
               config: |
                  cluster_name = "vault-integrated-storage"
@@ -93,8 +93,8 @@ spec:
           auditStorage:
             enabled: true
             size: 10Gi
+            storageClass: nfs-client
         
-        # UI
         ui:
           enabled: true
           serviceType: ClusterIP
@@ -102,14 +102,6 @@ spec:
         # Injector (for automatic secret injection)
         injector:
           enabled: true
-          replicas: 1
-          resources:
-            requests:
-              memory: 256Mi
-              cpu: 250m
-            limits:
-              memory: 512Mi
-              cpu: 500m
   
   destination:
     server: https://kubernetes.default.svc
