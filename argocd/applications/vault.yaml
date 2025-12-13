@@ -14,8 +14,6 @@ spec:
     repoURL: https://helm.releases.hashicorp.com
     chart: vault
     targetRevision: 0.31.0
-    syncPolicy:
-      applicationsSync: create-only
     helm:
       values: |
         global:
