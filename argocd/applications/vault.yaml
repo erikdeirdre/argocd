@@ -45,10 +45,6 @@ spec:
                  cluster_name = "vault-integrated-storage"
                  ui = true
                  listener "tcp" {
-                    address = "127.0.0.1:8200"
-                    tls_disable = true
-                 }
-                 listener "tcp" {
                     tls_disable = 0
                     address = "[::]:8200"
                     cluster_address = "[::]:8201"
