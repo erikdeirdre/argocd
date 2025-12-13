@@ -22,6 +22,8 @@ spec:
           enabled: true
           tlsDisable: false
         server:
+          extraEnvironmentVars:
+            VAULT_CACERT: /vault/userconfig/vault-ha-tls/ca.crt
           volumes:
             - name: userconfig-vault-ha-tls
               secret:
