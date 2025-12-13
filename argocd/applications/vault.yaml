@@ -55,6 +55,7 @@ spec:
                     tls_cert_file = "/vault/userconfig/vault-ha-tls/tls.crt"
                     tls_key_file  = "/vault/userconfig/vault-ha-tls/tls.key"
                     tls_client_ca_file = "/vault/userconfig/vault-ha-tls/ca.crt"
+                    tls_require_and_verify_client_cert = true
                  }
                  storage "raft" {
                     path = "/vault/data"
