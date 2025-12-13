@@ -22,6 +22,8 @@ spec:
         server:
           extraEnvironmentVars:
             VAULT_CACERT: /vault/userconfig/vault-ha-tls/ca.crt
+            VAULT_TLSCERT: /vault/userconfig/vault-ha-tls/tls.crt
+            VAULT_TLSKEY: /vault/userconfig/vault-ha-tls/tls.key
           volumes:
             - name: userconfig-vault-ha-tls
               secret:
@@ -43,22 +45,30 @@ spec:
               enabled: true
               setNodeId: true
               config: |
-                 cluster_name = "vault-integrated-storage"
-                 ui = true
-                 listener "tcp" {
-                    tls_disable = 0
-                    address = "[::]:8200"
-                    cluster_address = "[::]:8201"
-                    tls_cert_file = "/vault/userconfig/vault-ha-tls/tls.crt"
-                    tls_key_file  = "/vault/userconfig/vault-ha-tls/tls.key"
-                    tls_client_ca_file = "/vault/userconfig/vault-ha-tls/ca.crt"
-                    tls_require_and_verify_client_cert = false
-                 }
-                 storage "raft" {
-                    path = "/vault/data"
-                 }
-                 disable_mlock = true
-                 service_registration "kubernetes" {}
+                cluster_name = "vault-integrated-storage"
+                ui = true
+                listener "tcp" {
+                  tls_disable = 0
+                  address = "[::]:8200"
+                  cluster_address = "[::]:8201"
+                  tls_cert_file = "/vault/userconfig/vault-ha-tls/tls.crt"
+                  tls_key_file  = "/vault/userconfig/vault-ha-tls/tls.key"
+                  tls_client_ca_file = "/vault/userconfig/vault-ha-tls/ca.crt"
+                  tls_require_and_verify_client_cert = false
+                }
+
+                storage "raft" {
+                  path = "/vault/data"
+                }
+
+                retry_join {
+                  leader_api_addr = "https://vault-0.vault-internal:8200"
+                  leader_ca_cert_file = "/vault/userconfig/vault-ha-tls/ca.crt"
+                  leader_client_cert_file = "/vault/userconfig/vault-ha-tls/tls.crt"
+                  leader_client_key_file = "/vault/userconfig/vault-ha-tls/tls.key"
+                }
+                disable_mlock = true
+                service_registration "kubernetes" {}
           
           # Resources
           resources:
