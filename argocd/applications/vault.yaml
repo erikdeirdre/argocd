@@ -37,6 +37,7 @@ spec:
           
           # HA mode (recommended for production)
           ha:
+            enabled: true
             replicas: 2
             raft:
               enabled: true
