@@ -33,7 +33,7 @@ spec:
               readOnly: true
 
           standalone:
-            enabled: true
+            enabled: false
           
           # HA mode (recommended for production)
           ha:
