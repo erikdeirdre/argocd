@@ -29,11 +29,17 @@ spec:
               secret:
                 defaultMode: 420
                 secretName: vault-ha-tls
+            - name: userconfig-vault-raft-client
+              secret:
+                defaultMode: 420
+                secretName: vault-raft-client
           volumeMounts:
             - mountPath: /vault/userconfig/vault-ha-tls
               name: userconfig-vault-ha-tls
               readOnly: true
-
+            - mountPath: /vault/userconfig/vault-raft-client
+              name: userconfig-vault-raft-client
+              readOnly: true
           standalone:
             enabled: false
           
