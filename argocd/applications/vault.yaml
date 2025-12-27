@@ -86,7 +86,7 @@ spec:
             ingressClassName: traefik
             annotations:
               traefik.ingress.kubernetes.io/service.serversscheme: https
-              traefik.ingress.kubernetes.io/router.middlewares: vault-server-headers@kubernetescrd,vault-redirect-ui@kubernetescrd
+              traefik.ingress.kubernetes.io/router.middlewares: vault-vault-server-headers@kubernetescrd,vault-vault-redirect-ui@kubernetescrd
               traefik.ingress.kubernetes.io/service.serverstransport: vault-transport@kubernetescrd  # Use the transport
               traefik.ingress.kubernetes.io/router.entrypoints: websecure
               traefik.ingress.kubernetes.io/router.tls: "true"
