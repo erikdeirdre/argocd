@@ -120,8 +120,7 @@ spec:
         injector:
           enabled: true
           certs:
-            secretName: vault-agent-injector-tls
-          externalVaultAddr: "https://vault.vault.svc.cluster.local:8200"
+            secretName: vault-ha-tls
   destination:
     server: https://kubernetes.default.svc
     namespace: vault
