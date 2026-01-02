@@ -19,6 +19,7 @@ spec:
         global:
           enabled: true
           tlsDisable: false
+          externalVaultAddr: https://vault.vault.svc:8200
         server:
           extraEnvironmentVars:
             VAULT_CACERT: /vault/userconfig/vault-ha-tls/ca.crt
@@ -121,10 +122,7 @@ spec:
           enabled: true
           certs:
             secretName: vault-agent-injector-tls
-          externalVaultAddr: https://vault.vault.svc:8200
 
-          # Vault server's CA certificate
-          caBundleSecretName: vault-server-ca
   destination:
     server: https://kubernetes.default.svc
     namespace: vault
