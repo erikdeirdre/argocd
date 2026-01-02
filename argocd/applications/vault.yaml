@@ -121,8 +121,7 @@ spec:
           enabled: true
           certs:
             secretName: vault-agent-injector-tls
-          # Vault server address
-          #externalVaultAddr: "https://vault.vault.svc:8200"
+          externalVaultAddr: "https://vault.vault.svc:8200"
 
           # Vault server's CA certificate
           #caBundleSecretName: vault-server-ca
