@@ -124,7 +124,7 @@ spec:
           externalVaultAddr: "https://vault.vault.svc:8200"
 
           # Vault server's CA certificate
-          caBundleSecretName: vault-server-ca
+          #caBundleSecretName: vault-server-ca
   destination:
     server: https://kubernetes.default.svc
     namespace: vault
