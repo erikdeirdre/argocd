@@ -19,7 +19,6 @@ spec:
         global:
           enabled: true
           tlsDisable: false
-          externalVaultAddr: https://vault.vault.svc:8200
         server:
           extraEnvironmentVars:
             VAULT_CACERT: /vault/userconfig/vault-ha-tls/ca.crt
