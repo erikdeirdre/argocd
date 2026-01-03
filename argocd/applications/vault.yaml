@@ -116,12 +116,11 @@ spec:
           enabled: true
           serviceType: ClusterIP
         
-        # Injector (for automatic secret injection)
         injector:
-          enabled: true
-          certs:
-            secretName: vault-agent-injector-tls
+          enabled: false
 
+        csi:
+          enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: vault
