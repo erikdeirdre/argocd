@@ -20,7 +20,7 @@ spec:
       - values.yaml
       parameters:
       - name: replicaCount
-        value: "1"
+        value: "2"
       - name: image.tag
         value: latest
   destination:

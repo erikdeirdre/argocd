@@ -20,9 +20,9 @@ spec:
       - values.yaml
       parameters:
       - name: replicaCount
-        value: "1"
+        value: "2"
       - name: image.tag
-        value: add-vite-to-docker-build
+        value: latest
   destination:
     server: https://kubernetes.default.svc
     namespace: cysl
