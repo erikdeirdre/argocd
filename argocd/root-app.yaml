@@ -16,7 +16,7 @@ spec:
   
   source:
     repoURL: https://github.com/erikdeirdre/argocd.git
-    targetRevision: work-on-appofapps
+    targetRevision: main
     path: argocd/applications
     directory:
       recurse: true
