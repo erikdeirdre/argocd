@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/CoastalYouthSoccer/helm-charts.git
-    targetRevision: finalize-templates
+    targetRevision: main
     path: templates/vault
   destination:
     server: https://kubernetes.default.svc
